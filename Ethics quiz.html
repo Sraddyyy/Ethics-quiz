@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethics & Moral Philosophy Finals Quiz</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --primary-hover: #004085;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --success: #28a745;
+            --danger: #dc3545;
+            --border: #dee2e6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .score-tracker {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .quiz-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .question-meta {
+            font-weight: bold;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+
+        .option-item {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-item:hover {
+            border-color: #a1b1c1;
+            background: #eef1f5;
+        }
+
+        .option-item.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success) !important;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .option-item.incorrect {
+            background-color: #f8d7da !important;
+            border-color: var(--danger) !important;
+            color: #721c24;
+        }
+
+        .option-item.disabled {
+            pointer-events: none;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 1rem;
+            display: none;
+        }
+
+        .feedback.visible {
+            display: block;
+        }
+
+        .feedback-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .hint-btn {
+            background: none;
+            border: none;
+            color: #6c757d;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .hint-text {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            border-radius: 0 4px 4px 0;
+            display: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .summary-card {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .summary-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Introduction to Ethics & Moral Philosophy</h1>
+        <p>Finals Comprehensive Review Quiz (30 Items)</p>
+    </header>
+
+    <div class="score-tracker">
+        Question: <span id="current-q-num">1</span>/30 | Score: <span id="current-score">0</span>
+    </div>
+
+    <div id="quiz-area">
+        <!-- Dynamic content goes here -->
+    </div>
+
+    <div class="nav-buttons">
+        <button id="prev-btn" onclick="prevQuestion()" disabled>Previous</button>
+        <button id="next-btn" onclick="nextQuestion()" disabled>Next Question</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            "question": "Which of the following correctly captures the core distinction between 'ethics' and 'moral philosophy' as outlined in the text?",
+            "hint": "Think about which one deals with immediate behavioral guidance versus the broader analysis of where those guidelines come from.",
+            "options": [
+                { "text": "Ethics focuses on the specific rules of 'what to do,' while moral philosophy investigates the 'why and how' behind those rules.", "rationale": "The text states that ethics is the 'what to do' (rules guiding actions), whereas moral philosophy is the broader field exploring where rules come from and how they are justified.", "isCorrect": true },
+                { "text": "Ethics is purely an individual pursuit, whereas moral philosophy strictly governs societal policy and state legislation.", "rationale": "Both ethics and moral philosophy have personal and societal implications, so this distinction is inaccurate.", "isCorrect": false },
+                { "text": "Ethics is derived entirely from Latin traditions, while moral philosophy is derived from Greek customs.", "rationale": "While the word 'ethics' comes from the Greek 'ethos' and 'morality' from Latin 'moralis', this does not define the functional distinction between the two fields.", "isCorrect": false },
+                { "text": "Ethics deals exclusively with universal truths, whereas moral philosophy deals exclusively with cultural exceptions.", "rationale": "The text mentions that moral philosophy asks deeper questions about whether morality is universal or relative, rather than being bound to exceptions.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "An individual is faced with an uncomfortable choice: tell the truth and hurt a close friend's feelings, or tell a comforting lie. According to the text's definitions, this situation is best classified as a:",
+            "hint": "Review the specific term given to an action-choice where both options carry overlapping valid, yet conflicting, moral elements.",
+            "options": [
+                { "text": "Metaethical puzzle", "rationale": "Metaethics deals with the nature of ethical language and truths, not practical personal choices between competing moral values.", "isCorrect": false },
+                { "text": "Moral dilemma", "rationale": "The text defines a moral dilemma as a situation where we must choose between two actions that have both good and bad aspects, making the decision difficult because both choices can feel simultaneously right and wrong.", "isCorrect": true },
+                { "text": "Deterministic constraint", "rationale": "This situation illustrates a choice between moral values, not an instance where free will is completely negated by prior causes.", "isCorrect": false },
+                { "text": "Categorical imperative violation", "rationale": "While Kant has views on this, the scenario itself is used in the handout to define a general concept regarding tough decision-making.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "The acronym RISK is used to highlight the impacts of breaking rules. What does the letter 'S' represent in this context?",
+            "hint": "Consider how continued chaos and behavioral instability from rule-breaking affect a group's forward momentum.",
+            "options": [
+                { "text": "Social justice devaluation", "rationale": "Social justice is a type of justice, but it is not part of the specific RISK acronym detailed under the impacts of breaking rules.", "isCorrect": false },
+                { "text": "Systemic discrimination", "rationale": "Systemic discrimination is an issue fought by social justice movements, not an element of the rule-breaking acronym.", "isCorrect": false },
+                { "text": "Stalls progress", "rationale": "According to the handout, the impacts of breaking rules lead to RISK: Ruins trust, Interferes with harmony, Stalls progress, and Keeps negative consequences.", "isCorrect": true },
+                { "text": "Subjective value conflicts", "rationale": "Subjective elements relate to ethical relativism, not the specific breakdown of the RISK acronym.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "Which branch of ethics answers questions like 'What do we mean when we say something is right or wrong?' and investigates whether moral truths exist independently or depend on personal feelings?",
+            "hint": "This branch steps back from prescribing specific actions to look at the very foundation, definition, and meaning of moral properties.",
+            "options": [
+                { "text": "Normative Ethics", "rationale": "Normative ethics focuses on establishing standards or norms for behavior and answers 'What should I do?'", "isCorrect": false },
+                { "text": "Applied Ethics", "rationale": "Applied ethics involves the practical application of ethical principles to real-world fields like business or medicine.", "isCorrect": false },
+                { "text": "Environmental Ethics", "rationale": "Environmental ethics is a specific subfield of applied ethics focusing on human interactions with nature.", "isCorrect": false },
+                { "text": "Metaethics", "rationale": "The text states that metaethics explores the nature of ethical statements, judgments, and whether truths are objective (moral realism) or subjective.", "isCorrect": true }
+            ]
+        },
+        {
+            "question": "If a moral agent decides that telling a lie is permissible because it prevents widespread panic and results in the greatest overall benefit for the community, which specific ethical framework are they applying?",
+            "hint": "The agent is looking at the immediate outcome of this specific unique action to maximize immediate happiness.",
+            "options": [
+                { "text": "Deontology", "rationale": "Deontology emphasizes that certain actions, like lying, are inherently wrong regardless of whether the outcome is good or bad.", "isCorrect": false },
+                { "text": "Act Consequentialism", "rationale": "Act consequentialism looks at each individual action and its specific outcomes, judging the rightness of that act solely by how much happiness or benefit it directly creates.", "isCorrect": true },
+                { "text": "Virtue Ethics", "rationale": "Virtue ethics focuses on the moral character of the agent rather than calculations of outcomes or strict duties.", "isCorrect": false },
+                { "text": "Rule Consequentialism", "rationale": "Rule consequentialism evaluates whether a general rule, when universally applied over the long run, creates the best outcome, rather than evaluating an individual lie on a case-by-case basis.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "John Stuart Mill departed from Jeremy Bentham's foundational view of utilitarianism by arguing that:",
+            "hint": "Think about Mill's focus on the qualitative differences in human happiness, specifically regarding mental vs. bodily satisfaction.",
+            "options": [
+                { "text": "All pleasures are structurally identical, and only the quantity of pain matters.", "rationale": "This contradicts Mill's primary refinement of utilitarianism regarding the distinct types of pleasures.", "isCorrect": false },
+                { "text": "Intellectual pleasures possess a higher inherent value than basic physical pleasures.", "rationale": "The text explicitly states that Mill, a follower of Bentham, argued that some pleasures (like intellectual ones) are more valuable than others (like physical ones).", "isCorrect": true },
+                { "text": "Consequences should be entirely ignored in favor of the Categorical Imperative.", "rationale": "The Categorical Imperative is Immanuel Kant's deontological framework, which is entirely separate from utilitarianism.", "isCorrect": false },
+                { "text": "Morality is entirely subjective and depends entirely on regional cultural norms.", "rationale": "Mill was a utilitarian which is a form of consequentialism; he did not advocate for cultural ethical relativism.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "According to Immanuel Kant's Categorical Imperative, how should a person judge whether an intended action is morally permissible?",
+            "hint": "Consider the idea of asking yourself: 'What if everyone did what I am about to do?'",
+            "options": [
+                { "text": "By calculating if the action minimizes pain for the maximum number of sentient beings.", "rationale": "This describes Bentham's utilitarianism, which focuses on outcomes, whereas Kant rejects consequential calculations.", "isCorrect": false },
+                { "text": "By determining if the action conforms to the golden mean between excess and deficiency.", "rationale": "The golden mean is Aristotle's framework for virtue ethics, not Kant's deontological rule.", "isCorrect": false },
+                { "text": "By evaluating whether they would be willing to universalize the principle of their action so that everyone else acts the same way.", "rationale": "The text explains Kant's rule as saying you should act only in ways that you believe everyone should act.", "isCorrect": true },
+                { "text": "By checking whether the local community's historical traditions and laws explicitly allow the action.", "rationale": "Kant based morality on universal reason, not local laws or cultural traditions.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "A key philosophical requirement of Kantian deontology is that we must always treat other individuals as:",
+            "hint": "This principle asserts that humans have intrinsic value and should never be used as mere tools to achieve something else.",
+            "options": [
+                { "text": "Instruments for systemic social engineering", "rationale": "Treating people as instruments treats them as mere means, which violates Kant's foundational principles.", "isCorrect": false },
+                { "text": "Ends in themselves, rather than merely as means to an end", "rationale": "The text notes that Kant argued rational principles guide moral actions and that individuals should always treat others as ends in themselves, not merely as a means to an end.", "isCorrect": true },
+                { "text": "Subjective agents whose rights can be modified depending on consequences", "rationale": "Kant believed moral duties are absolute and rights cannot be bargained away for positive consequences.", "isCorrect": false },
+                { "text": "Agents striving solely to achieve material wealth and eudaimonia", "rationale": "Eudaimonia is the centerpiece of Aristotle's virtue ethics, not Kant's duty-based system.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "In virtue ethics, how does Aristotle define a virtue like 'courage'?",
+            "hint": "Think about finding a balanced sweet spot between doing too much (excess) and doing too little (deficiency).",
+            "options": [
+                { "text": "As the absolute avoidance of any dangerous or challenging situation.", "rationale": "Avoidance would align more with deficiency or cowardice, not the actual virtue of courage.", "isCorrect": false },
+                { "text": "As a rigid rule that dictates identical actions across all historical eras.", "rationale": "Virtue ethics focuses on situational character application rather than rigid behavioral rulebooks.", "isCorrect": false },
+                { "text": "As the mathematical calculation of utility and pleasure.", "rationale": "Utility calculations belong to consequentialism, not virtue frameworks.", "isCorrect": false },
+                { "text": "As the golden mean or intermediate state situated between the extremes of recklessness and cowardice.", "rationale": "The text states that Aristotle proposed the 'golden mean,' where virtue lies between excess and deficiency, explicitly highlighting courage as the mean between recklessness and cowardice.", "isCorrect": true }
+            ]
+        },
+        {
+            "question": "Which moral theory prioritizes the fundamental question 'What kind of person should I be?' over questions about specific duties or outcome calculations?",
+            "hint": "This theory focuses on the cultivation of intrinsic character traits and human flourishing (eudaimonia).",
+            "options": [
+                { "text": "Consequentialism", "rationale": "Consequentialism asks 'What will result in the greatest happiness?' based on outcomes.", "isCorrect": false },
+                { "text": "Deontology", "rationale": "Deontology asks 'What are my moral duties?' based on rules.", "isCorrect": false },
+                { "text": "Virtue Ethics", "rationale": "According to the comparative table in the text, virtue ethics shifts the focus to character/virtues and asks 'What kind of person should I be?'", "isCorrect": true },
+                { "text": "Metaethical Realism", "rationale": "Metaethical realism is a position on the nature of moral truths, not a normative theory focusing on agent character.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "A government decides to utilize a progressive taxation system to redistribute wealth and fund key public services for low-income citizens. This initiative is a practical application of:",
+            "hint": "Look at the keyword associated with how resources, wealth, and opportunities are allocated across a population.",
+            "options": [
+                { "text": "Retributive justice", "rationale": "Retributive justice deals strictly with punishment for wrongdoings and crimes.", "isCorrect": false },
+                { "text": "Distributive justice", "rationale": "The text defines distributive justice as focusing on the fair distribution of resources and benefits within society, explicitly citing progressive taxation as an example.", "isCorrect": true },
+                { "text": "Restorative justice", "rationale": "Restorative justice focuses on repairing harm caused by criminal behavior through dialogue and amends.", "isCorrect": false },
+                { "text": "Metaethical subjectivism", "rationale": "Progressive taxation is a policy implementation of political/social justice, not a metaethical theory regarding feelings.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "How does restorative justice fundamentally differ from retributive justice?",
+            "hint": "Consider the difference between balancing the scales via punishment versus healing the relationships and damage caused by a crime.",
+            "options": [
+                { "text": "Restorative justice emphasizes repairing the harm and making amends through dialogue, whereas retributive justice focuses primarily on punishing the offender.", "rationale": "The text states that restorative justice focuses on repairing harm caused by criminal behavior involving the offender, victim, and community, unlike retributive justice which deals with appropriate punishment.", "isCorrect": true },
+                { "text": "Restorative justice rejects human rights completely, while retributive justice upholds them.", "rationale": "Both types operate within ethical and legal systems that recognize human value, but they have different goals for addressing offenses.", "isCorrect": false },
+                { "text": "Restorative justice is applied exclusively to environmental corporate crimes.", "rationale": "Restorative justice can apply across various criminal or community settings and is not limited to corporate environmental issues.", "isCorrect": false },
+                { "text": "Retributive justice relies entirely on financial progressive taxation.", "rationale": "Taxation is an example of distributive justice, not retributive justice.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "The basic human rights that safeguard personal freedom, protect against arbitrary arrest or detention, and ensure equality before the law are globally enshrined in which 1948 document?",
+            "hint": "This landmark document was adopted by the newly formed United Nations right after World War II.",
+            "options": [
+                { "text": "The Kyoto Protocol", "rationale": "The Kyoto Protocol is an environmental treaty, not a foundational document for general human rights.", "isCorrect": false },
+                { "text": "The Hippocratic Oath", "rationale": "The Hippocratic Oath is an ancient ethical pledge taken by physicians regarding medicine.", "isCorrect": false },
+                { "text": "The Universal Declaration of Human Rights (UDHR)", "rationale": "The text explicitly mentions that basic human rights are enshrined in international documents such as the Universal Declaration of Human Rights (UDHR), adopted by the United Nations in 1948.", "isCorrect": true },
+                { "text": "The Philippine Development Plan", "rationale": "The Philippine Development Plan is a regional strategic plan for national growth, not a 1948 global human rights document.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "A person claims: 'Arranged marriage is morally right in one society but morally wrong in another, and since there is no objective universal standard, both viewpoints are equally valid.' This perspective demonstrates:",
+            "hint": "This concept treats morality as relative to cultural frameworks and rejects a one-size-fits-all universal moral truth.",
+            "options": [
+                { "text": "Moral Absolutism", "rationale": "Moral absolutism asserts that certain ethical principles are universal and unchanging across all cultures.", "isCorrect": false },
+                { "text": "Ethical Relativism", "rationale": "The text explains that ethical relativism asserts that morality depends on cultural, historical, or personal circumstances, denying objective universal moral standards.", "isCorrect": true },
+                { "text": "Determinism", "rationale": "Determinism argues that choices are predetermined by prior causes, which is separate from the cultural valuation of marriage practices.", "isCorrect": false },
+                { "text": "Biocentrism", "rationale": "Biocentrism is an environmental ethical theory asserting moral value for all living things.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "What is a major criticism leveled against ethical relativism as highlighted in the handout?",
+            "hint": "If whatever a culture approves of is automatically 'right' for them, think about what happens when a culture approves of slavery or systemic abuse.",
+            "options": [
+                { "text": "It is too rigid and ignores the rich cultural diversity of human societies.", "rationale": "Rigidity and ignoring diversity are criticisms directed at moral absolutism, not relativism.", "isCorrect": false },
+                { "text": "It can be used to justify harmful or unethical practices like discrimination if they are culturally accepted.", "rationale": "The text notes that a primary criticism of ethical relativism is that it can justify harmful practices and prevent moral progress by declaring all moral codes equally valid.", "isCorrect": true },
+                { "text": "It places too much emphasis on universal human rights documents like the UDHR.", "rationale": "Relativism rejects universal standards, so it would not overemphasize universal human rights documents.", "isCorrect": false },
+                { "text": "It completely denies the existence of biological factors in human actions.", "rationale": "Denying or accepting biological factors relates to debates about free will and determinism, not cultural relativism.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "The view that certain actions, such as unprovoked murder, are objectively and inherently wrong across all historical eras and geographical locations, regardless of local customs, represents:",
+            "hint": "This perspective holds that moral truths exist independently of human consensus and are completely unyielding.",
+            "options": [
+                { "text": "Moral Absolutism", "rationale": "The text states that moral absolutism asserts certain ethical principles are universal and unchanging, and that right and wrong are objective and fixed.", "isCorrect": true },
+                { "text": "Ethical Subjectivism", "rationale": "Subjectivism makes morality dependent on individual feelings, which contradicts the concept of objective, unchanging truths.", "isCorrect": false },
+                { "text": "Act Consequentialism", "rationale": "Consequentialism allows actions to change moral status depending on whether the outcome produces good results, so murder wouldn't be 'inherently' wrong across all contexts under this view.", "isCorrect": false },
+                { "text": "Anthropocentrism", "rationale": "Anthropocentrism is a human-centered view of environmental value, not a view regarding universal rules against murder.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "Which core philosophical concept is defined as 'the ability to make choices independently, without being entirely controlled by external forces or deterministic factors'?",
+            "hint": "This concept provides the standard baseline for asserting that individuals have personal autonomy over their actions.",
+            "options": [
+                { "text": "Agency capacity", "rationale": "Agency is a feature tied to responsibility, but the exact phrasing given in the text defines 'Free Will.'", "isCorrect": false },
+                { "text": "Determinism", "rationale": "Determinism is the opposite view, suggesting all choices are entirely caused by prior conditions.", "isCorrect": false },
+                { "text": "Free Will", "rationale": "The text explicitly defines free will as the ability to make choices independently, without being entirely controlled by external forces or deterministic factors.", "isCorrect": true },
+                { "text": "Moral Luck", "rationale": "Moral luck deals with outcomes outside an agent's control, which complicates assignments of praise or blame.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "According to the handout, what elements are critical features for assigning moral responsibility to an individual?",
+            "hint": "To be responsible, you must have the power to choose (agency), be answerable (accountability), mean to do it (intentionality), and understand the effects (awareness).",
+            "options": [
+                { "text": "Consequences, Happiness, Utility, and Pleasures", "rationale": "These are concepts primarily associated with utilitarianism and consequentialism.", "isCorrect": false },
+                { "text": "Agency, Accountability, Intentionality, and Awareness", "rationale": "The main features of moral responsibility listed in the text are Agency, Accountability, Intentionality, Awareness, and Capacity.", "isCorrect": true },
+                { "text": "Relativism, Absolutism, Free Will, and Causality", "rationale": "These are macro-philosophical concepts and positions in metaethical debates, not the personal criteria for moral responsibility.", "isCorrect": false },
+                { "text": "Biocentrism, Ecocentrism, Anthropocentrism, and Sustainability", "rationale": "These are frameworks explicitly native to environmental ethics.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "If a philosopher argues that free will is merely an illusion because every choice an individual makes is entirely determined by prior conditions like genetics, psychological trauma, and upbringing, they are advocating for:",
+            "hint": "This position relies on the absolute law of cause and effect applied strictly to human behavior.",
+            "options": [
+                { "text": "Deontology", "rationale": "Deontology emphasizes reason and duty, which relies on the capacity to follow rules rather than choices being completely predetermined by trauma or genes.", "isCorrect": false },
+                { "text": "Virtue Ethics", "rationale": "Virtue ethics focuses on actively cultivating character, which implies some capacity for change and personal agency.", "isCorrect": false },
+                { "text": "Determinism", "rationale": "The text states that determinism suggests all events, including human actions, are caused by prior conditions and can question free will as an illusion shaped by past experiences.", "isCorrect": true },
+                { "text": "Distributive Realism", "rationale": "This is a fabricated philosophical term; resource distribution falls under distributive justice.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "Which of the following is an example of a criticism against Determinism mentioned in the text?",
+            "hint": "If a criminal can blame their genes and childhood for everything they do, consider what happens to our legal and ethical system of punishment.",
+            "options": [
+                { "text": "It is completely unable to explain how genetic traits are passed down through families.", "rationale": "Determinism uses genetic traits as an example of prior causes; it doesn't fail to explain them.", "isCorrect": false },
+                { "text": "It can undermine moral accountability because if choices are determined by external forces, individuals cannot easily be held responsible for bad actions.", "rationale": "The text explicitly states as a criticism that if actions are determined by external forces, it may undermine moral responsibility and accountability.", "isCorrect": true },
+                { "text": "It relies too heavily on Immanuel Kant's rule of universalizing rules.", "rationale": "Kant's work is deontological and supports rational free choice, which is structurally separate from pure determinism.", "isCorrect": false },
+                { "text": "It completely ignores the role of corporate governance and customer safety regulations.", "rationale": "Corporate governance belongs to the domain of business ethics, not metaphysical debates on determinism.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "What terms define the moral principles that guide corporate behavior, ensuring transparency, and the corporate obligations toward social and environmental well-being?",
+            "hint": "Look for the specific terms used in commerce that separate internal corporate integrity from outward societal and environmental programs.",
+            "options": [
+                { "text": "Metaethics and Ethical Subjectivism", "rationale": "These terms relate to the abstract meaning of moral statements, not practical business behaviors or corporate strategies.", "isCorrect": false },
+                { "text": "Business Ethics and Corporate Social Responsibility (CSR)", "rationale": "The text defines business ethics as moral principles guiding corporate behavior, and CSR as extending beyond profit to highlight responsibilities toward society and the environment.", "isCorrect": true },
+                { "text": "Act Consequentialism and Absolute Deontology", "rationale": "While these ethical frameworks can be applied to business, they are not the specific institutional terms defined in the corporate module.", "isCorrect": false },
+                { "text": "Biocentrism and Industrial Anthropocentrism", "rationale": "These are environmental theories rather than the terms designated for general corporate ethics and social engagement.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "Providing fair wages, ensuring safe working conditions, and establishing non-discriminatory policies inside a company are core principles of:",
+            "hint": "This principle ensures that the people within the organization are respected, protected, and compensated properly.",
+            "options": [
+                { "text": "Deceptive marketing", "rationale": "Deceptive marketing is an unethical practice that violates consumer protection, rather than a fair internal policy.", "isCorrect": false },
+                { "text": "Fair treatment of employees", "rationale": "The text highlights 'Fair Treatment of Employees' as a main principle of business ethics, explicitly listing fair wages, safe working conditions, and non-discriminatory policies.", "isCorrect": true },
+                { "text": "Philanthropic profit allocation", "rationale": "Philanthropy refers specifically to donating corporate profits to external charities, not handling internal worker conditions.", "isCorrect": false },
+                { "text": "Ecocentric management", "rationale": "Ecocentrism deals with treating entire ecosystems as having moral value, not internal human resources management.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "Which of the following is classified as a 'Philanthropy' initiative under Corporate Social Responsibility (CSR)?",
+            "hint": "Philanthropy specifically involves altruistic financial giving or donation of assets to external causes.",
+            "options": [
+                { "text": "A corporation donating a portion of its corporate profits to local healthcare and educational charities.", "rationale": "The text explicitly defines philanthropy within CSR as 'Donating a portion of profits to charities and social causes.'", "isCorrect": true },
+                { "text": "Using biodegradable materials in product packaging to lower waste.", "rationale": "Using biodegradable materials is an example of environmental sustainability, not direct monetary philanthropy.", "isCorrect": false },
+                { "text": "Enforcing a strict rule against insider trading and corporate fraud.", "rationale": "Anti-fraud rules are part of internal corporate governance and basic compliance, not charity donations.", "isCorrect": false },
+                { "text": "Forcing employees to work overtime in unsafe conditions without proper pay.", "rationale": "This is an example of employee exploitation, which is a major ethical violation.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "The branch of philosophy that focuses specifically on the moral relationship between human beings and the natural world is known as:",
+            "hint": "This subfield covers moral challenges like deforestation, global warming, and ecological conservation.",
+            "options": [
+                { "text": "Bioethics", "rationale": "Bioethics is a broader branch addressing science, medicine, technology, and advanced genetics, rather than just the natural world relationship.", "isCorrect": false },
+                { "text": "Environmental ethics", "rationale": "The text defines environmental ethics as the branch of philosophy that focuses on the moral relationship between humans and the natural environment.", "isCorrect": true },
+                { "text": "Distributive justice", "rationale": "Distributive justice deals with resource allocation among humans in a society, not the moral status of nature.", "isCorrect": false },
+                { "text": "Metaethical realism", "rationale": "Metaethical realism deals with objective moral truths generally, not specifically human-nature relationships.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "If a government approves wide-scale deforestation of an old-growth forest solely to build industrial factories and expand cities to boost economic metrics, they are operating under which environmental ethical theory?",
+            "hint": "This theory views human beings as superior and sees the natural environment as a mere collection of resources for human utility.",
+            "options": [
+                { "text": "Biocentrism", "rationale": "Biocentrism recognizes the intrinsic value of all living things, which would conflict with destroying a forest solely for human economic benefit.", "isCorrect": false },
+                { "text": "Ecocentrism", "rationale": "Ecocentrism prioritizes the safety of entire ecosystems over localized human industrial development.", "isCorrect": false },
+                { "text": "Anthropocentrism", "rationale": "The text states that anthropocentrism is a human-centered ethics that values nature only for its usefulness to humans, explicitly providing the example of deforestation to expand cities.", "isCorrect": true },
+                { "text": "Restorative justice", "rationale": "Restorative justice is a framework for fixing criminal harms via dialogue, not an environmental evaluation theory.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "Which statement accurately describes 'Ecocentrism' as presented in the environmental ethics module?",
+            "hint": "Think of an ecosystem-centered approach that looks at the big picture, valuing rivers, soil, and entire biological networks as a whole.",
+            "options": [
+                { "text": "It values nature exclusively for its direct financial and structural utility to human civilization.", "rationale": "This describes anthropocentrism, not ecocentrism.", "isCorrect": false },
+                { "text": "It prioritizes the preservation of entire ecosystems, including both living organisms and non-living elements.", "rationale": "The text explicitly defines ecocentrism as prioritizing entire ecosystems, including both living and non-living elements.", "isCorrect": true },
+                { "text": "It argues that only rational human beings possess any form of moral responsibility or rights.", "rationale": "This is an anthropocentric premise; ecocentrism extends moral consideration far past human beings.", "isCorrect": false },
+                { "text": "It seeks to maximize corporate profits by ignoring carbon footprint data.", "rationale": "Ignoring carbon footprints is an unethical practice that violates sustainability metrics.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "What are the three pillars of Sustainable Development that must work together to ensure long-term prosperity?",
+            "hint": "To keep development sustainable, you must balance financial viability, ecological safety, and human societal equity.",
+            "options": [
+                { "text": "Normative, Metaethics, and Applied Pillars", "rationale": "These are the three foundational branches of general moral philosophy.", "isCorrect": false },
+                { "text": "Economic, Environmental, and Social Sustainability", "rationale": "The handout clearly defines the three pillars of sustainable development as Economic, Environmental, and Social sustainability.", "isCorrect": true },
+                { "text": "Agency, Accountability, and Intentionality", "rationale": "These are core elements required to establish personal moral responsibility.", "isCorrect": false },
+                { "text": "Autonomy, Beneficence, and Non-Maleficence", "rationale": "These are part of the core pillars of clinical medical ethics.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "According to the text, how do 'Bioethics' and 'Medical Ethics' differ in terms of their analytical scope?",
+            "hint": "One field looks broadly at cutting-edge tech, cloning, and biological science, while the other centers on the immediate clinical interactions between a physician and a patient.",
+            "options": [
+                { "text": "Medical ethics is a broad field covering global environmental concerns, while bioethics is exclusively limited to the historical Hippocratic Oath.", "rationale": "This reverses the scopes; bioethics is the broader field, whereas medical ethics focuses on clinical situations.", "isCorrect": false },
+                { "text": "Bioethics encompasses broader ethical concerns in biology, technology, and global health, whereas medical ethics focuses primarily on patient care and doctor-patient relationships.", "rationale": "The text directly states that bioethics encompasses broader ethical concerns in biology, medicine, technology, and global health, while medical ethics is primarily focused on patient care and clinical decisions.", "isCorrect": true },
+                { "text": "There is no difference in scope, as both deal exclusively with progressive corporate taxation.", "rationale": "Progressive taxation belongs to distributive justice, not bioethical or clinical medical frameworks.", "isCorrect": false },
+                { "text": "Bioethics is entirely subjective, while medical ethics is completely absolutist.", "rationale": "Both fields utilize structured normative theories and principles, rather than being defined by subjectivist or absolutist divides.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "A mentally competent and well-informed patient decides to refuse a life-saving medical treatment due to personal beliefs. The doctor respects this decision. Which pillar of medical ethics does this action directly honor?",
+            "hint": "This pillar recognizes an individual's sovereign right to have control over their own body and medical options.",
+            "options": [
+                { "text": "Non-maleficence", "rationale": "Non-maleficence means doing no harm, which is distinct from actively honoring a patient's personal choice.", "isCorrect": false },
+                { "text": "Autonomy", "rationale": "The text states that autonomy means patients have the right to make their own healthcare decisions, and providers must respect a mentally competent, informed patient's choice even if they disagree.", "isCorrect": true },
+                { "text": "Beneficence", "rationale": "Beneficence requires acting in the patient's best medical interest, which a doctor might feel conflicts with a treatment refusal.", "isCorrect": false },
+                { "text": "Distributive Retribution", "rationale": "This is a mismatched term combining different types of justice frameworks.", "isCorrect": false }
+            ]
+        },
+        {
+            "question": "Researchers decide to shift away from using live animals for testing a new drug, opting instead for alternative lab-grown tissues to reduce pain and distress. This is an application of ethical parameters in:",
+            "hint": "This issue balances the necessity of scientific/medical progress with the moral duty to treat living research subjects humanely.",
+            "options": [
+                { "text": "Anthropocentric corporate expansion", "rationale": "Anthropocentrism prioritizes human utility and would not be the framework driving animal distress reductions.", "isCorrect": false },
+                { "text": "Animal Experimentation within Bioethics", "rationale": "The text lists animal experimentation as a common bioethical issue that seeks to balance scientific progress with humane treatment, explicitly citing alternative testing methods like lab-grown tissues.", "isCorrect": true },
+                { "text": "Kantian Categorical Imperatives for businesses", "rationale": "While Kant has ethical rules, this scenario is explicitly used in the text to demonstrate animal welfare parameters within bioethics.", "isCorrect": false },
+                { "text": "Cultural Ethical Relativism", "rationale": "This shift is an application of bioethical guidelines regarding minimizing pain, not an application of cultural relativism.", "isCorrect": false }
+            ]
+        }
+    ];
+
+    let currentIndex = 0;
+    let score = 0;
+    let selections = new Array(quizData.length).fill(null); // Keeps track of user selections
+
+    const quizArea = document.getElementById('quiz-area');
+    const currentQNumSpan = document.getElementById('current-q-num');
+    const currentScoreSpan = document.getElementById('current-score');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+
+    function renderQuestion(index) {
+        if(index >= quizData.length) {
+            renderSummary();
+            return;
+        }
+
+        const data = quizData[index];
+        currentQNumSpan.textContent = index + 1;
+        currentScoreSpan.textContent = score;
+
+        // Reset navigation buttons setup
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = selections[index] === null; 
+        if(index === quizData.length - 1 && selections[index] !== null) {
+            nextBtn.textContent = "Finish & See Summary";
+        } else {
+            nextBtn.textContent = "Next Question";
+        }
+
+        let html = `
+            <div class="quiz-card">
+                <div class="question-meta">Item ${index + 1}</div>
+                <p class="question-text">${data.question}</p>
+                
+                <button class="hint-btn" onclick="toggleHint()">Need a hint?</button>
+                <div id="hint-block" class="hint-text">${data.hint}</div>
+
+                <ul class="options-list">
+        `;
+
+        data.options.forEach((opt, oIdx) => {
+            let extraClass = "";
+            // If user already answered this question previously
+            if(selections[index] !== null) {
+                extraClass += " disabled";
+                if(opt.isCorrect) extraClass += " correct";
+                if(selections[index] === oIdx && !opt.isCorrect) extraClass += " incorrect";
+            }
+
+            html += `
+                <li class="option-item${extraClass}" onclick="selectOption(${oIdx})">
+                    ${String.fromCharCode(65 + oIdx)}. ${opt.text}
+                </li>
+            `;
+        });
+
+        html += `
+                </ul>
+                <div id="feedback-block" class="feedback">
+                    <div id="feedback-title" class="feedback-title"></div>
+                    <div id="feedback-rationale"></div>
+                </div>
+            </div>
+        `;
+
+        quizArea.innerHTML = html;
+
+        // Restore feedback states if already selected
+        if(selections[index] !== null) {
+            showFeedback(data.options[selections[index]], data);
+        }
+    }
+
+    function toggleHint() {
+        const hint = document.getElementById('hint-block');
+        hint.style.display = hint.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function selectOption(optIndex) {
+        if(selections[currentIndex] !== null) return; // Block double choosing
+
+        selections[currentIndex] = optIndex;
+        const data = quizData[currentIndex];
+        const selectedOpt = data.options[optIndex];
+
+        if(selectedOpt.isCorrect) {
+            score++;
+            currentScoreSpan.textContent = score;
+        }
+
+        // Re-render immediately to colorize options elements and disable further actions
+        renderQuestion(currentIndex);
+    }
+
+    function showFeedback(selectedOpt, questionData) {
+        const fbBlock = document.getElementById('feedback-block');
+        const fbTitle = document.getElementById('feedback-title');
+        const fbRatio = document.getElementById('feedback-rationale');
+
+        fbBlock.className = "feedback visible " + (selectedOpt.isCorrect ? "correct" : "incorrect");
+        fbBlock.style.backgroundColor = selectedOpt.isCorrect ? "#d4edda" : "#f8d7da";
+        fbBlock.style.borderLeft = `5px solid ${selectedOpt.isCorrect ? 'var(--success)' : 'var(--danger)'}`;
+        
+        fbTitle.textContent = selectedOpt.isCorrect ? "✓ Correct Answer!" : "✗ Incorrect Attempt";
+        fbTitle.style.color = selectedOpt.isCorrect ? "#155724" : "#721c24";
+        
+        fbRatio.textContent = selectedOpt.rationale;
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    }
+
+    function prevQuestion() {
+        if(currentIndex > 0) {
+            currentIndex--;
+            renderQuestion(currentIndex);
+        }
+    }
+
+    function renderSummary() {
+        document.querySelector('.score-tracker').style.display = 'none';
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+
+        const percentage = Math.round((score / quizData.length) * 100);
+        let message = "Keep studying! Review your lecture notes to secure your grade.";
+        if(percentage >= 90) message = "Excellent work! You have perfectly mastered the ethics final coverage.";
+        else if(percentage >= 75) message = "Great job! You've got a secure grasp on most components.";
+
+        quizArea.innerHTML = `
+            <div class="quiz-card summary-card">
+                <h2>Review Summary Complete</h2>
+                <p>You have finished all 30 quiz multiple-choice review problems.</p>
+                <div class="summary-score">${score} / ${quizData.length}</div>
+                <p style="font-size: 1.2rem; font-weight: bold; color: #555;">Grade: ${percentage}%</p>
+                <p style="margin-top: 20px; color: #666; font-style: italic;">${message}</p>
+                <button style="margin-top:25px;" onclick="window.location.reload()">Restart Review Exercise</button>
+            </div>
+        `;
+    }
+
+    // Initial load
+    renderQuestion(currentIndex);
+</script>
+
+</body>
+</html>
